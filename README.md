@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐾 VaxPet
 
-## Getting Started
+**Carteira de vacinação digital para pets — de várias espécies.**
 
-First, run the development server:
+🔗 **Demo ao vivo:** https://vaxpet-omega.vercel.app
+
+VaxPet ajuda tutores a registrar as vacinas e vermífugos que já aplicaram nos seus animais e a saber exatamente o que está vencendo — cachorro, gato, coelho, cavalo e outros, todos no mesmo lugar. O projeto nasceu de um problema real: com várias espécies em casa, é fácil perder o controle do que cada bicho precisa e quando.
+
+## ✨ Funcionalidades
+
+- **Vários pets, várias espécies** — cachorro, gato, coelho, cavalo e outros, cada um com seu perfil.
+- **Carteira digital** — histórico de doses por pet, com data de aplicação, veterinário e observações.
+- **Motor de lembretes** — cada dose com data de reforço ganha um status automático: *Em dia*, *Vence em breve* ou *Atrasada*.
+- **Painel "Precisa de atenção"** — mostra na home o que está vencendo ou atrasado, entre todos os pets.
+- **Multiusuário** — autenticação por email/senha; cada pessoa vê e gerencia apenas os próprios animais.
+
+## 🛠️ Tecnologias
+
+- **Next.js** (App Router) + **React** + **TypeScript**
+- **Tailwind CSS** para estilização
+- **Turso** (libSQL) + **Drizzle ORM** para o banco
+- **Better Auth** — autenticação self-hosted (email/senha)
+- Deploy na **Vercel**
+
+## 🧠 Decisões de projeto
+
+- **Sem API REST intermediária:** a leitura é feita por Server Components e a escrita por Server Actions, aproveitando o modelo do App Router.
+- **Lógica de status isolada:** o cálculo de "em dia / vence em breve / atrasada" vive numa função pura (`lib/vaccine-status.ts`), desacoplada do banco e da UI — fácil de testar.
+- **Datas como texto ISO** (`AAAA-MM-DD`) para evitar bugs de fuso horário no cálculo de vencimento.
+- **Autenticação self-hosted:** os dados de login ficam no próprio banco, sem depender de serviço externo.
+- **Autorização no servidor:** toda consulta é filtrada pelo dono logado — o cliente nunca decide de quem é o dado.
+
+## 🚀 Rodando localmente
+
+**Pré-requisitos:** Node 18+ e uma conta no [Turso](https://turso.tech).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/BrunaDev/vaxpet.git
+cd vaxpet
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Crie um arquivo `.env.local` na raiz:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+TURSO_DATABASE_URL=libsql://...
+TURSO_AUTH_TOKEN=...
+BETTER_AUTH_SECRET=...          # gere com: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+BETTER_AUTH_URL=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Aplique o schema no banco e suba o servidor:
 
-## Learn More
+```bash
+npx drizzle-kit migrate
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Abra [http://localhost:3000](http://localhost:3000).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📸 Screenshots
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+<!-- Adicione aqui um print da home (com o painel de lembretes) e um da carteira de um pet.
+     Dica: crie uma pasta /docs, coloque as imagens lá e referencie assim:
+     ![Home](docs/home.png) -->
 
-## Deploy on Vercel
+## 🗺️ Próximos passos
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Login com Google (OAuth)
+- Editar e excluir doses
+- Templates de vacinas sugeridas por espécie e idade
+- Verificação de email no cadastro
+- Testes automatizados da lógica de status
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+Desenvolvido por **Bruna** · [GitHub](https://github.com/BrunaDev)
