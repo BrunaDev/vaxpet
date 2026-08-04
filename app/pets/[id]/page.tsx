@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getPetById } from "@/lib/db/queries";
 import { AddDoseForm } from "../../components/add-dose-form";
 import { SPECIES_EMOJI } from "@/lib/species";
+import { StatusBadge } from "../../components/status-badge"
 
 const TYPE_LABEL: Record<string, string> = {
   vacina: "Vacina", vermifugo: "Vermífugo", outro: "Outro",
@@ -58,7 +59,10 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                 </div>
               </div>
               {dose.nextDueDate && (
-                <p className="mt-2 text-sm text-muted-foreground">Próxima dose: {formatBR(dose.nextDueDate)}</p>
+                <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                  <span>Próxima dose: {formatBR(dose.nextDueDate)}</span>
+                  <StatusBadge nextDueDate={dose.nextDueDate} />
+                </div>
               )}
               {dose.vet && <p className="mt-1 text-sm text-muted-foreground">Vet: {dose.vet}</p>}
             </div>
