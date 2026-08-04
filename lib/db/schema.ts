@@ -32,3 +32,4 @@ export const dosesRelations = relations(doses, ({ one }) => ({
 
 export type Pet = typeof pets.$inferSelect;
 export type Dose = typeof doses.$inferSelect;
+export * from "./auth-schema";
