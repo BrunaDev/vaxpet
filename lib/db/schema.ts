@@ -29,3 +29,6 @@ export const petsRelations = relations(pets, ({ many }) => ({ doses: many(doses)
 export const dosesRelations = relations(doses, ({ one }) => ({
   pet: one(pets, { fields: [doses.petId], references: [pets.id] }),
 }));
+
+export type Pet = typeof pets.$inferSelect;
+export type Dose = typeof doses.$inferSelect;
