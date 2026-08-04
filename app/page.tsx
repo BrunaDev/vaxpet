@@ -5,7 +5,7 @@ import { StatusBadge } from "./components/status-badge";
 import { getStatus } from "@/lib/vaccine-status";
 import Link from "next/link";
 import { AppHeader } from "./components/app-header";
-
+import { requireUser } from "@/lib/auth-helpers";
 
 function formatBR(iso: string) {
   const [y, m, d] = iso.split("-");
@@ -13,7 +13,8 @@ function formatBR(iso: string) {
 }
 
 export default async function Home() {
-  const [pets, upcoming] = await Promise.all([getPets(), getUpcomingDoses()]);
+  const user = await requireUser();
+  const [pets, upcoming] = await Promise.all([getPets(user.id), getUpcomingDoses(user.id)]);
 
   // só o que precisa de atenção: atrasada ou vencendo
   const alerts = upcoming.filter((d) => {
@@ -41,7 +42,7 @@ export default async function Home() {
                   className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 transition hover:border-primary"
                 >
                   <div>
-                    <p className="font-medium">{dose.pet.name} · {dose.name}</p>
+                    <p className="font-medium">{dose.petName} · {dose.name}</p>
                     <p className="text-sm text-muted-foreground">Próxima: {formatBR(dose.nextDueDate!)}</p>
                   </div>
                   <StatusBadge nextDueDate={dose.nextDueDate} />

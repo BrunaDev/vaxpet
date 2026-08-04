@@ -1,13 +1,21 @@
 "use server";
 import { db } from "@/lib/db";
-import { doses } from "@/lib/db/schema";
+import { doses, pets } from "@/lib/db/schema";
 import { revalidatePath } from "next/cache";
+import { and, eq } from "drizzle-orm";
+import { requireUser } from "@/lib/auth-helpers";
 
 export async function createDose(formData: FormData) {
+  const user = await requireUser();
   const petId = formData.get("petId") as string;
   const name = (formData.get("name") as string)?.trim();
   const dateApplied = formData.get("dateApplied") as string;
   if (!petId || !name || !dateApplied) return;
+
+  const owned = await db.query.pets.findFirst({
+    where: and(eq(pets.id, petId), eq(pets.userId, user.id)),
+  });
+  if (!owned) return; // não é teu pet → ignora
 
   await db.insert(doses).values({
     petId,

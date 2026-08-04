@@ -4,6 +4,7 @@ import { getPetById } from "@/lib/db/queries";
 import { AddDoseForm } from "../../components/add-dose-form";
 import { SPECIES_EMOJI } from "@/lib/species";
 import { StatusBadge } from "../../components/status-badge"
+import { requireUser } from "@/lib/auth-helpers";
 
 const TYPE_LABEL: Record<string, string> = {
   vacina: "Vacina", vermifugo: "Vermífugo", outro: "Outro",
@@ -16,8 +17,9 @@ function formatBR(iso: string | null) {
 }
 
 export default async function PetPage({ params }: { params: Promise<{ id: string }> }) {
+  const user = await requireUser();
   const { id } = await params;               // no Next 15, params é assíncrono
-  const pet = await getPetById(id);
+  const pet = await getPetById(id, user.id);
   if (!pet) notFound();
 
   return (

@@ -1,0 +1,1 @@
+ALTER TABLE `pets` ADD `user_id` text NOT NULL REFERENCES user(id);

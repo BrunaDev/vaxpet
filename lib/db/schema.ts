@@ -1,8 +1,10 @@
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { relations } from "drizzle-orm";
+import { user } from "./auth-schema";
 
 export const pets = sqliteTable("pets", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   species: text("species", { enum: ["cachorro", "gato", "coelho", "cavalo", "outro"] }).notNull(),
   breed: text("breed"),
