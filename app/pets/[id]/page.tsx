@@ -24,7 +24,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
-      <Link href="/" className="text-sm text-muted-foreground hover:text-foreground">← Meus pets</Link>
+      <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">← Meus pets</Link>
 
       <header className="mt-4 mb-8 flex items-center gap-4">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-chip text-3xl">

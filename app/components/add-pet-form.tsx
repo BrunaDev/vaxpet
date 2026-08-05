@@ -1,6 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { createPet } from "@/lib/actions/pets";
+import type { Pet } from "@/lib/db/schema";
 
 const SPECIES = [
   { value: "cachorro", label: "🐶 Cachorro" },
@@ -12,13 +13,13 @@ const SPECIES = [
 
 const field = "w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none transition focus:border-primary";
 
-export function AddPetForm() {
+export function AddPetForm({ onSuccess }: { onSuccess?: () => void }) {
   const ref = useRef<HTMLFormElement>(null);
   return (
     <form
       ref={ref}
-      action={async (data) => { await createPet(data); ref.current?.reset(); }}
-      className="grid gap-3 rounded-2xl border border-border bg-card p-5 sm:grid-cols-2"
+      action={async (data) => { await createPet(data); ref.current?.reset(); onSuccess?.(); }}
+      className="grid gap-3 sm:grid-cols-2"
     >
       <input name="name" required placeholder="Nome" className={`${field} sm:col-span-2`} />
       <select name="species" required defaultValue="" className={field}>

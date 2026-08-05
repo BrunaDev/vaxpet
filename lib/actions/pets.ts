@@ -21,5 +21,5 @@ export async function createPet(formData: FormData) {
     weightKg: weightRaw ? Number(weightRaw) : null,
   });
 
-  revalidatePath("/"); // avisa o Next que a lista mudou → recarrega sozinha
+  revalidatePath("/dashboard"); // avisa o Next que a lista mudou → recarrega sozinha
 }
