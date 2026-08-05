@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { pets, doses } from "@/lib/db/schema";
-import { desc, eq, and, asc, isNotNull } from "drizzle-orm";
+import { desc, eq, and, asc, isNotNull, count } from "drizzle-orm";
 
 export async function getPets(userId: string) {
   return db.select().from(pets)
@@ -25,4 +25,14 @@ export async function getUpcomingDoses(userId: string) {
     .innerJoin(pets, eq(doses.petId, pets.id))     // dose → pet, pra chegar no dono
     .where(and(eq(pets.userId, userId), isNotNull(doses.nextDueDate)))
     .orderBy(asc(doses.nextDueDate));
+}
+
+export async function getUserStats(userId: string) {
+  const [petRow] = await db.select({ value: count() }).from(pets).where(eq(pets.userId, userId));
+  const [doseRow] = await db
+    .select({ value: count() })
+    .from(doses)
+    .innerJoin(pets, eq(doses.petId, pets.id))   // doses não têm dono direto — chega nele pelo pet
+    .where(eq(pets.userId, userId));
+  return { pets: petRow?.value ?? 0, doses: doseRow?.value ?? 0 };
 }
