@@ -22,6 +22,7 @@ export const doses = sqliteTable("doses", {
   type: text("type", { enum: ["vacina", "vermifugo", "outro"] }).notNull().default("vacina"),
   dateApplied: text("date_applied").notNull(),   // ISO
   nextDueDate: text("next_due_date"),            // ISO, opcional — é o que gera o lembrete
+  intervalMonths: integer("interval_months"), // null = dose única; 12 = repete a cada 12 meses
   vet: text("vet"),
   notes: text("notes"),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull().$defaultFn(() => new Date()),

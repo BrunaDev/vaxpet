@@ -1,0 +1,1 @@
+ALTER TABLE `doses` ADD `interval_months` integer;

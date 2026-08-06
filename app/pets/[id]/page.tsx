@@ -18,7 +18,8 @@ function formatBR(iso: string | null) {
 
 export default async function PetPage({ params }: { params: Promise<{ id: string }> }) {
   const user = await requireUser();
-  const { id } = await params;               // no Next 15, params é assíncrono
+  const { id } = await params;             // no Next 15, params é assíncrono
+  const RECURRENCE_LABEL: Record<number, string> = { 6: "a cada 6 meses", 12: "todo ano", 24: "a cada 2 anos", 36: "a cada 3 anos" };
   const pet = await getPetById(id, user.id);
   if (!pet) notFound();
 
@@ -61,9 +62,16 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                 </div>
               </div>
               {dose.nextDueDate && (
-                <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                  <span>Próxima dose: {formatBR(dose.nextDueDate)}</span>
-                  <StatusBadge nextDueDate={dose.nextDueDate} />
+                <div className="mt-2">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span>Próxima dose: {formatBR(dose.nextDueDate)}</span>
+                    <StatusBadge nextDueDate={dose.nextDueDate} />
+                  </div>
+                  {dose.intervalMonths && (
+                    <p className="mt-1 text-xs text-primary">
+                      🔄 Repete {RECURRENCE_LABEL[dose.intervalMonths] ?? `a cada ${dose.intervalMonths} meses`}
+                    </p>
+                  )}
                 </div>
               )}
               {dose.vet && <p className="mt-1 text-sm text-muted-foreground">Vet: {dose.vet}</p>}
