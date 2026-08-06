@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
 
 type Tab = "login" | "signup";
 const field = "w-full rounded-xl border border-border bg-background py-2.5 pl-10 pr-10 text-sm outline-none transition focus:border-primary";
@@ -75,7 +76,7 @@ export function AuthCard({ initialTab }: { initialTab: Tab }) {
 
         {isLogin && (
           <div className="text-right">
-            <button type="button" className="text-sm text-muted-foreground hover:text-foreground">Esqueceu a senha?</button>
+            <Link href="/forgot-password" className="text-sm text-muted-foreground hover:text-foreground">Esqueceu a senha?</Link>
           </div>
         )}
         {error && <p className="text-sm text-red-600">{error}</p>}
