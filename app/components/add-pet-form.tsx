@@ -2,6 +2,7 @@
 import { useRef } from "react";
 import { createPet } from "@/lib/actions/pets";
 import type { Pet } from "@/lib/db/schema";
+import { SubmitButton } from "./submit-button";
 
 const SPECIES = [
   { value: "cachorro", label: "🐶 Cachorro" },
@@ -40,9 +41,9 @@ export function AddPetForm({ onSuccess }: { onSuccess?: () => void }) {
       <select name="origin" defaultValue="" className={`${field} sm:col-span-2`}>
         {ORIGINS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
-      <button type="submit" className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90 sm:col-span-2">
+      <SubmitButton className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 sm:col-span-2">
         Adicionar pet
-      </button>
+      </SubmitButton>
     </form>
   );
 }
