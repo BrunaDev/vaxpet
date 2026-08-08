@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPetById } from "@/lib/db/queries";
-import { AddDoseForm } from "../../components/add-dose-form";
 import { SPECIES_EMOJI } from "@/lib/species";
 import { StatusBadge } from "../../components/status-badge"
 import { requireUser } from "@/lib/auth-helpers";
+import { getAgeBand } from "@/lib/pet-age";
+import { DoseSection } from "../../components/dose-section";
 
 const TYPE_LABEL: Record<string, string> = {
   vacina: "Vacina", vermifugo: "Vermífugo", outro: "Outro",
@@ -39,8 +40,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
         </div>
       </header>
 
-      <h2 className="mb-3 font-display text-xl">Registrar dose</h2>
-      <AddDoseForm petId={pet.id} />
+      <DoseSection petId={pet.id} species={pet.species} ageBand={getAgeBand(pet.birthDate, pet.species)} />
 
       <h2 className="mb-3 mt-10 font-display text-xl">Carteira</h2>
       <section className="grid gap-3">

@@ -20,7 +20,10 @@ const field = "w-full rounded-xl border border-border bg-background px-4 py-2.5 
 const labelCls = "mb-1 block text-sm font-medium";
 const optional = "font-normal text-muted-foreground";
 
-export function AddDoseForm({ petId }: { petId: string }) {
+export function AddDoseForm({ petId, prefill }: {
+  petId: string;
+  prefill?: { name: string; type: string; intervalMonths: number | null } | null;
+}) {
   const ref = useRef<HTMLFormElement>(null);
   return (
     <form
@@ -32,12 +35,12 @@ export function AddDoseForm({ petId }: { petId: string }) {
 
       <div className="sm:col-span-2">
         <label className={labelCls}>Nome</label>
-        <input name="name" required placeholder="Ex.: V10, Antirrábica" className={field} />
+        <input name="name" required defaultValue={prefill?.name ?? ""} placeholder="Ex.: V10, Antirrábica" className={field} />
       </div>
 
       <div>
         <label className={labelCls}>Tipo</label>
-        <select name="type" defaultValue="vacina" className={field}>
+        <select name="type" defaultValue={prefill?.type ?? "vacina"} className={field}>
           {TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
         </select>
       </div>
@@ -54,7 +57,7 @@ export function AddDoseForm({ petId }: { petId: string }) {
 
       <div>
         <label className={labelCls}>Repetição</label>
-        <select name="intervalMonths" defaultValue="" className={field}>
+        <select name="intervalMonths" defaultValue={prefill?.intervalMonths != null ? String(prefill.intervalMonths) : ""} className={field}>
           {RECURRENCE.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
         </select>
       </div>
@@ -70,3 +73,4 @@ export function AddDoseForm({ petId }: { petId: string }) {
     </form>
   );
 }
+
