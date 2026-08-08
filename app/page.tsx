@@ -2,6 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { PawPrint, ShieldCheck, CalendarCheck, Bell, Heart, Stethoscope } from "lucide-react";
+import { AppPreview } from "./components/app-preview";
 
 const FEATURES = [
   { icon: CalendarCheck, title: "Calendário automático", desc: "Lembretes de vacinas baseados na idade e espécie do animal." },
@@ -63,6 +64,8 @@ export default async function LandingPage() {
           </Link>
         </div>
       </section>
+
+      <AppPreview />
 
       <section className="bg-muted py-20">
         <div className="mx-auto max-w-5xl px-6">
