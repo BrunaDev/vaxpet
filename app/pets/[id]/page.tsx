@@ -8,7 +8,7 @@ import { getAgeBand } from "@/lib/pet-age";
 import { DoseSection } from "../../components/dose-section";
 
 const TYPE_LABEL: Record<string, string> = {
-  vacina: "Vacina", vermifugo: "Vermífugo", outro: "Outro",
+  vacina: "Vacina", vermifugo: "Vermífugo", exame: "Exame", outro: "Outro",
 };
 
 function formatBR(iso: string | null) {
@@ -40,7 +40,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
         </div>
       </header>
 
-      <DoseSection petId={pet.id} species={pet.species} ageBand={getAgeBand(pet.birthDate, pet.species)} />
+      <DoseSection petId={pet.id} species={pet.species} ageBand={getAgeBand(pet.birthDate, pet.species)} origin={pet.origin} />
 
       <h2 className="mb-3 mt-10 font-display text-xl">Carteira</h2>
       <section className="grid gap-3">

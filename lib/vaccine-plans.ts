@@ -1,4 +1,4 @@
-export type PlanItem = { name: string; type: "vacina" | "vermifugo" | "outro"; intervalMonths: number | null; note?: string };
+export type PlanItem = { name: string; type: "vacina" | "vermifugo" | "exame" | "outro"; intervalMonths: number | null; note?: string };
 export type Plan = { filhote: PlanItem[]; adulto: PlanItem[]; nota?: string };
 
 export const VACCINE_PLANS: Record<string, Plan> = {
@@ -54,3 +54,28 @@ export const VACCINE_PLANS: Record<string, Plan> = {
     nota: "Para esta espécie o protocolo depende muito do animal — consulte um veterinário.",
   },
 };
+
+export const ADOPTION_TESTS: Record<string, PlanItem[]> = {
+  cachorro: [
+    { name: "Teste de cinomose e parvovirose", type: "exame", intervalMonths: null, note: "Teste rápido, útil para animais sem histórico." },
+    { name: "Pesquisa de hemoparasitas (erliquiose/anaplasmose)", type: "exame", intervalMonths: null, note: "Comuns em cães de rua, transmitidos por carrapato." },
+    { name: "Teste de leishmaniose", type: "exame", intervalMonths: null, note: "Depende da região — pergunte se é endêmica na sua." },
+  ],
+  gato: [
+    { name: "Teste FIV e FeLV", type: "exame", intervalMonths: null, note: "Recomendado antes de apresentar a outros gatos." },
+  ],
+  coelho: [
+    { name: "Avaliação veterinária inicial", type: "exame", intervalMonths: null, note: "Inclui checagem de parasitas." },
+  ],
+  cavalo: [
+    { name: "Teste de AIE (Coggins)", type: "exame", intervalMonths: null, note: "Anemia Infecciosa Equina — exigido em muitas situações no Brasil." },
+    { name: "Avaliação veterinária inicial", type: "exame", intervalMonths: null },
+  ],
+  outro: [
+    { name: "Triagem veterinária inicial", type: "exame", intervalMonths: null, note: "Conforme a espécie." },
+  ],
+};
+
+export function needsAdoptionTests(origin: string | null): boolean {
+  return origin === "adotado" || origin === "resgatado" || origin === "desconhecido";
+}

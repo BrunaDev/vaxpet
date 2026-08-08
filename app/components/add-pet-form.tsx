@@ -11,6 +11,14 @@ const SPECIES = [
   { value: "outro", label: "🐾 Outro" },
 ];
 
+const ORIGINS = [
+  { value: "", label: "Origem (opcional)" },
+  { value: "casa", label: "Comprado / nascido em casa" },
+  { value: "adotado", label: "Adotado / abrigo" },
+  { value: "resgatado", label: "Resgatado da rua" },
+  { value: "desconhecido", label: "Não sei" },
+];
+
 const field = "w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none transition focus:border-primary";
 
 export function AddPetForm({ onSuccess }: { onSuccess?: () => void }) {
@@ -29,6 +37,9 @@ export function AddPetForm({ onSuccess }: { onSuccess?: () => void }) {
       <input name="breed" placeholder="Raça (opcional)" className={field} />
       <input name="birthDate" type="date" className={field} />
       <input name="weightKg" type="number" step="0.1" placeholder="Peso (kg)" className={field} />
+      <select name="origin" defaultValue="" className={`${field} sm:col-span-2`}>
+        {ORIGINS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+      </select>
       <button type="submit" className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90 sm:col-span-2">
         Adicionar pet
       </button>

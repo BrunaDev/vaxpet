@@ -6,6 +6,7 @@ const TYPES = [
   { value: "vacina", label: "Vacina" },
   { value: "vermifugo", label: "Vermífugo" },
   { value: "outro", label: "Outro" },
+  { value: "exame", label: "Exame" },
 ];
 
 const RECURRENCE = [

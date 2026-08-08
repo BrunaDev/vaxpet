@@ -28,7 +28,7 @@ export async function createDose(formData: FormData) {
   await db.insert(doses).values({
     petId,
     name,
-    type: (formData.get("type") as "vacina" | "vermifugo" | "outro") || "vacina",
+    type: (formData.get("type") as "vacina" | "vermifugo" | "exame" | "outro") || "vacina",
     dateApplied,
     nextDueDate,
     intervalMonths,

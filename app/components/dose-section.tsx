@@ -5,8 +5,8 @@ import { SuggestedPlan } from "./suggested-plan";
 import type { PlanItem } from "@/lib/vaccine-plans";
 import type { AgeBand } from "@/lib/pet-age";
 
-export function DoseSection({ petId, species, ageBand }: {
-  petId: string; species: string; ageBand: AgeBand;
+export function DoseSection({ petId, species, ageBand, origin }: {
+  petId: string; species: string; ageBand: AgeBand; origin: string | null;
 }) {
   const [prefill, setPrefill] = useState<PlanItem | null>(null);
   const [nonce, setNonce] = useState(0); // muda a "key" pra remontar o form com os novos valores
@@ -19,7 +19,7 @@ export function DoseSection({ petId, species, ageBand }: {
 
   return (
     <div className="grid gap-6">
-      <SuggestedPlan species={species} ageBand={ageBand} onPick={handlePick} />
+      <SuggestedPlan species={species} ageBand={ageBand} origin={origin} onPick={handlePick} />
       <div id="registrar-dose">
         <h2 className="mb-3 font-display text-xl">Registrar dose</h2>
         <AddDoseForm key={nonce} petId={petId} prefill={prefill} />

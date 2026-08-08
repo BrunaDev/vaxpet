@@ -16,6 +16,7 @@ export async function createPet(formData: FormData) {
     userId: user.id,
     name,
     species: species as Pet["species"],
+    origin: (formData.get("origin") as "casa" | "adotado" | "resgatado" | "desconhecido") || null,
     breed: (formData.get("breed") as string) || null,
     birthDate: (formData.get("birthDate") as string) || null,
     weightKg: weightRaw ? Number(weightRaw) : null,
