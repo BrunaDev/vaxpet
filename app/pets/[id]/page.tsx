@@ -6,6 +6,7 @@ import { StatusBadge } from "../../components/status-badge"
 import { requireUser } from "@/lib/auth-helpers";
 import { getAgeBand } from "@/lib/pet-age";
 import { DoseSection } from "../../components/dose-section";
+import { PetActions } from "../../components/pet-actions";
 
 const TYPE_LABEL: Record<string, string> = {
   vacina: "Vacina", vermifugo: "Vermífugo", exame: "Exame", outro: "Outro",
@@ -28,16 +29,19 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
     <main className="mx-auto max-w-3xl px-6 py-12">
       <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">← Meus pets</Link>
 
-      <header className="mt-4 mb-8 flex items-center gap-4">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-chip text-3xl">
-          {SPECIES_EMOJI[pet.species]}
+      <header className="mt-4 mb-8 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-chip text-3xl">
+            {SPECIES_EMOJI[pet.species]}
+          </div>
+          <div>
+            <h1 className="font-display text-3xl">{pet.name}</h1>
+            <p className="text-muted-foreground capitalize">
+              {pet.species}{pet.breed ? ` · ${pet.breed}` : ""}
+            </p>
+          </div>
         </div>
-        <div>
-          <h1 className="font-display text-3xl">{pet.name}</h1>
-          <p className="text-muted-foreground capitalize">
-            {pet.species}{pet.breed ? ` · ${pet.breed}` : ""}
-          </p>
-        </div>
+        <PetActions pet={pet} />
       </header>
 
       <DoseSection petId={pet.id} species={pet.species} ageBand={getAgeBand(pet.birthDate, pet.species)} origin={pet.origin} />
