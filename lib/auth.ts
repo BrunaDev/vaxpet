@@ -17,14 +17,11 @@ export const auth = betterAuth({
   user: {
     deleteUser: {
       enabled: true,
-      sendDeleteAccountVerification: async ({ user, url }) => {
-        await sendDeleteAccountEmail(user.email, url);
-      },
       beforeDelete: async (user) => {
-        // apaga os pets do usuário antes (as doses caem por cascade) — garante limpeza total
         await db.delete(schema.pets).where(eq(schema.pets.userId, user.id));
       },
     },
   },
+  session: { freshAge: 0 },
   plugins: [nextCookies()],
 });
