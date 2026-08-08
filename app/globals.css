@@ -17,5 +17,6 @@
   --radius: 1rem;
 }
 
+html { color-scheme: only light; }
 body { background: var(--color-background); color: var(--color-foreground); font-family: var(--font-sans); }
 h1, h2, h3 { font-family: var(--font-display); }
