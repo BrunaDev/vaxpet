@@ -36,10 +36,14 @@ export function AddPetForm({ onSuccess }: { onSuccess?: () => void }) {
         {SPECIES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
       </select>
       <input name="breed" placeholder="Raça (opcional)" className={field} />
-      <label className="flex flex-col gap-1 text-xs text-muted-foreground">
-        Nascimento (opcional)
-        <input name="birthDate" type="date" className={field} />
-      </label>
+      <input
+        name="birthDate"
+        type="text"
+        placeholder="Nascimento (opcional)"
+        onFocus={(e) => (e.currentTarget.type = "date")}
+        onBlur={(e) => { if (!e.currentTarget.value) e.currentTarget.type = "text"; }}
+        className={field}
+      />
       <input name="weightKg" type="number" step="0.1" placeholder="Peso (kg)" className={field} />
       <select name="origin" defaultValue="" className={`${field} sm:col-span-2`}>
         {ORIGINS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
