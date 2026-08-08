@@ -3,6 +3,7 @@ import { requireUser } from "@/lib/auth-helpers";
 import { getUserStats } from "@/lib/db/queries";
 import { AppHeader } from "../components/app-header";
 import { ProfileForm } from "../components/profile-form";
+import { UserPhoto } from "../components/user-photo"
 
 export default async function PerfilPage() {
   const user = await requireUser();
@@ -15,14 +16,8 @@ export default async function PerfilPage() {
       <main className="mx-auto max-w-2xl px-6 py-10">
         <h1 className="mb-8 font-display text-4xl">Perfil</h1>
 
-        <div className="mb-6 flex items-center gap-4 rounded-2xl border border-border bg-card p-6">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-2xl font-medium text-primary-foreground">
-            {initial}
-          </span>
-          <div>
-            <p className="font-display text-xl">{user.name}</p>
-            <p className="text-sm text-muted-foreground">{user.email}</p>
-          </div>
+        <div className="mb-6 rounded-2xl border border-border bg-card p-6">
+          <UserPhoto name={user.name ?? ""} email={user.email} image={user.image ?? null} />
         </div>
 
         <div className="mb-6 grid grid-cols-2 gap-4">
