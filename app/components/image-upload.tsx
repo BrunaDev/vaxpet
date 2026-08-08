@@ -1,53 +1,43 @@
 "use client";
 import { useRef, useState } from "react";
-import { upload } from "@vercel/blob/client";
+import { useRouter } from "next/navigation";
 import { Loader2, Camera } from "lucide-react";
+
+const MAX_MB = 4;
+const ACCEPTED = ["image/jpeg", "image/png", "image/webp"];
 
 export function ImageUpload({ onUploaded, label = "Trocar foto" }: {
   onUploaded: (url: string) => Promise<void> | void;
   label?: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const MAX_MB = 5;
-  const ACCEPTED = ["image/jpeg", "image/png", "image/webp"];
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    if (!ACCEPTED.includes(file.type)) {
-      setError("Formato não aceito. Use JPG, PNG ou WEBP.");
-      if (inputRef.current) inputRef.current.value = "";
-      return;
-    }
-    if (file.size > MAX_MB * 1024 * 1024) {
-      setError(`Imagem muito grande (máx. ${MAX_MB} MB).`);
-      if (inputRef.current) inputRef.current.value = "";
-      return;
-    }
-    setError(null);
+    if (!ACCEPTED.includes(file.type)) { setError("Formato não aceito. Use JPG, PNG ou WEBP."); clear(); return; }
+    if (file.size > MAX_MB * 1024 * 1024) { setError(`Imagem muito grande (máx. ${MAX_MB} MB).`); clear(); return; }
 
     setBusy(true); setError(null);
     try {
-      const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase();
-      const mime = ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : "image/jpeg";
-      const safeName = `${Date.now()}.${ext}`;
-      const blob = await upload(safeName, file, {
-        access: "public",
-        handleUploadUrl: "/api/upload",
-        contentType: file.type || mime, // garante um tipo válido mesmo se o navegador não mandar
-      });
-      await onUploaded(blob.url);
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error ?? "Falha no upload.");
+      await onUploaded(data.url);
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Falha ao enviar a imagem.");
     } finally {
       setBusy(false);
-      if (inputRef.current) inputRef.current.value = "";
+      clear();
     }
   }
+  function clear() { if (inputRef.current) inputRef.current.value = ""; }
 
   return (
     <div>
