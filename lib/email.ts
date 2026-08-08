@@ -16,3 +16,18 @@ export async function sendResetPasswordEmail(to: string, url: string) {
       </div>`,
   });
 }
+
+export async function sendDeleteAccountEmail(to: string, url: string) {
+  await resend.emails.send({
+    from: "VaxPet <onboarding@resend.dev>",
+    to,
+    subject: "Confirme a exclusão da sua conta — VaxPet",
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto;color:#2b2a26">
+        <h2 style="font-family:Georgia,serif">Excluir conta</h2>
+        <p>Recebemos um pedido para excluir permanentemente a sua conta VaxPet e todos os seus dados (pets e carteiras).</p>
+        <p><a href="${url}" style="display:inline-block;background:#dc2626;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none">Confirmar exclusão</a></p>
+        <p style="color:#777;font-size:13px">Se não foi você, ignore este email — nada será excluído. A ação não pode ser desfeita.</p>
+      </div>`,
+  });
+}

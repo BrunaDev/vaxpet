@@ -3,7 +3,8 @@ import { requireUser } from "@/lib/auth-helpers";
 import { getUserStats } from "@/lib/db/queries";
 import { AppHeader } from "../components/app-header";
 import { ProfileForm } from "../components/profile-form";
-import { UserPhoto } from "../components/user-photo"
+import { UserPhoto } from "../components/user-photo";
+import { DeleteAccount } from "../components/delete-account";
 
 export default async function PerfilPage() {
   const user = await requireUser();
@@ -40,6 +41,10 @@ export default async function PerfilPage() {
         <div className="rounded-2xl border border-border bg-card p-6">
           <h2 className="mb-4 font-display text-xl">Dados da conta</h2>
           <ProfileForm initialName={user.name ?? ""} email={user.email} />
+        </div>
+
+        <div className="mt-6">
+          <DeleteAccount />
         </div>
       </main>
     </>
