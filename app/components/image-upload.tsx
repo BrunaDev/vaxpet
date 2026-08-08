@@ -16,7 +16,9 @@ export function ImageUpload({ onUploaded, label = "Trocar foto" }: {
     if (!file) return;
     setBusy(true); setError(null);
     try {
-      const blob = await upload(file.name, file, { access: "public", handleUploadUrl: "/api/upload" });
+      const ext = file.name.split(".").pop() ?? "jpg";
+      const safeName = `${Date.now()}.${ext.toLowerCase()}`;
+      const blob = await upload(safeName, file, { access: "public", handleUploadUrl: "/api/upload" });
       await onUploaded(blob.url);
     } catch {
       setError("Falha ao enviar a imagem.");
