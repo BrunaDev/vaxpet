@@ -51,3 +51,11 @@ export async function deletePet(petId: string) {
   await db.delete(pets).where(and(eq(pets.id, petId), eq(pets.userId, user.id)));
   revalidatePath("/dashboard");
 }
+
+export async function setPetPhoto(petId: string, url: string) {
+  const user = await requireUser();
+  await db.update(pets).set({ photoUrl: url })
+    .where(and(eq(pets.id, petId), eq(pets.userId, user.id)));
+  revalidatePath(`/pets/${petId}`);
+  revalidatePath("/dashboard");
+}

@@ -1,0 +1,40 @@
+"use client";
+import { useRef, useState } from "react";
+import { upload } from "@vercel/blob/client";
+import { Loader2, Camera } from "lucide-react";
+
+export function ImageUpload({ onUploaded, label = "Trocar foto" }: {
+  onUploaded: (url: string) => Promise<void> | void;
+  label?: string;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setBusy(true); setError(null);
+    try {
+      const blob = await upload(file.name, file, { access: "public", handleUploadUrl: "/api/upload" });
+      await onUploaded(blob.url);
+    } catch {
+      setError("Falha ao enviar a imagem.");
+    } finally {
+      setBusy(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  return (
+    <div>
+      <input ref={inputRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
+      <button type="button" onClick={() => inputRef.current?.click()} disabled={busy}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs transition hover:border-primary disabled:opacity-60">
+        {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
+        {busy ? "Enviando..." : label}
+      </button>
+      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+    </div>
+  );
+}

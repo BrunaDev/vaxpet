@@ -7,6 +7,7 @@ import { requireUser } from "@/lib/auth-helpers";
 import { getAgeBand } from "@/lib/pet-age";
 import { DoseSection } from "../../components/dose-section";
 import { PetActions } from "../../components/pet-actions";
+import { PetPhoto } from "../../components/pet-photo";
 
 const TYPE_LABEL: Record<string, string> = {
   vacina: "Vacina", vermifugo: "Vermífugo", exame: "Exame", outro: "Outro",
@@ -31,9 +32,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
       <header className="mt-4 mb-8 flex items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-chip text-3xl">
-            {SPECIES_EMOJI[pet.species]}
-          </div>
+          <PetPhoto pet={pet} />
           <div>
             <h1 className="font-display text-3xl">{pet.name}</h1>
             <p className="text-muted-foreground capitalize">
