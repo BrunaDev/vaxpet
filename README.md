@@ -1,34 +1,43 @@
 # 🐾 VaxPet
 
-**Carteira de vacinação digital para pets — de várias espécies.**
+![License: MIT](https://img.shields.io/badge/License-MIT-6e7d57.svg)
+![Next.js](https://img.shields.io/badge/Next.js-000?logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Turso](https://img.shields.io/badge/Turso-4FF8D2?logo=turso&logoColor=black)
+![Vercel](https://img.shields.io/badge/Deploy-Vercel-000?logo=vercel)
+
+**A carteira de vacinação do seu pet, sempre à mão** — para cães, gatos, coelhos, cavalos e mais.
 
 🔗 **Demo ao vivo:** https://vaxpet-omega.vercel.app
 
-VaxPet ajuda tutores a registrar as vacinas e vermífugos que já aplicaram nos seus animais e a saber exatamente o que está vencendo — cachorro, gato, coelho, cavalo e outros, todos no mesmo lugar. O projeto nasceu de um problema real: com várias espécies em casa, é fácil perder o controle do que cada bicho precisa e quando.
+VaxPet ajuda tutores a registrar as vacinas e vermífugos dos seus animais e a saber exatamente o que está vencendo. Nasceu de um problema real: com várias espécies em casa, é fácil perder o controle do que cada bicho precisa e quando.
 
 ## ✨ Funcionalidades
 
-- **Vários pets, várias espécies** — cachorro, gato, coelho, cavalo e outros, cada um com seu perfil.
-- **Carteira digital** — histórico de doses por pet, com data de aplicação, veterinário e observações.
-- **Motor de lembretes** — cada dose com data de reforço ganha um status automático: *Em dia*, *Vence em breve* ou *Atrasada*.
-- **Painel "Precisa de atenção"** — mostra na home o que está vencendo ou atrasado, entre todos os pets.
-- **Multiusuário** — autenticação por email/senha; cada pessoa vê e gerencia apenas os próprios animais.
+- **Vários pets, várias espécies** — cão, gato, coelho, cavalo e outros, cada um com seu perfil e foto.
+- **Carteira digital** — histórico de doses por pet, com data, veterinário e observações.
+- **Doses recorrentes** — informe o ciclo (ex.: "todo ano") e o app calcula sozinho a próxima data.
+- **Lembretes automáticos** — cada dose ganha um status: *em dia*, *vence em breve* ou *atrasada*, com um painel de "precisa de atenção".
+- **Planos por espécie e idade** — sugestões de vacinas/vermífugos conforme o animal (com aviso para confirmar com o veterinário).
+- **Exames para adotados** — para pets resgatados, o app sugere exames de triagem (FIV/FeLV, cinomose, etc.).
+- **Multiusuário** — login por email/senha ou Google; cada pessoa vê só os próprios animais.
 
 ## 🛠️ Tecnologias
 
 - **Next.js** (App Router) + **React** + **TypeScript**
-- **Tailwind CSS** para estilização
-- **Turso** (libSQL) + **Drizzle ORM** para o banco
-- **Better Auth** — autenticação self-hosted (email/senha)
+- **Tailwind CSS**
+- **Turso** (libSQL) + **Drizzle ORM**
+- **Better Auth** — autenticação self-hosted (email/senha + Google)
+- **Vercel Blob** — armazenamento das fotos
+- **Resend** — emails de redefinição de senha
 - Deploy na **Vercel**
 
 ## 🧠 Decisões de projeto
 
-- **Sem API REST intermediária:** a leitura é feita por Server Components e a escrita por Server Actions, aproveitando o modelo do App Router.
-- **Lógica de status isolada:** o cálculo de "em dia / vence em breve / atrasada" vive numa função pura (`lib/vaccine-status.ts`), desacoplada do banco e da UI — fácil de testar.
-- **Datas como texto ISO** (`AAAA-MM-DD`) para evitar bugs de fuso horário no cálculo de vencimento.
-- **Autenticação self-hosted:** os dados de login ficam no próprio banco, sem depender de serviço externo.
-- **Autorização no servidor:** toda consulta é filtrada pelo dono logado — o cliente nunca decide de quem é o dado.
+- **Orientação, não prescrição:** os planos de vacina são sugestões editáveis que sempre remetem ao veterinário — conservadores para espécies onde o protocolo varia muito (coelho, cavalo). Nunca um "calendário médico" cravado.
+- **Lógica isolada e testável:** o cálculo de status das vacinas vive numa função pura, desacoplada do banco e da UI.
+- **Datas como texto ISO** para evitar bugs de fuso horário no cálculo de vencimento.
+- **Autorização no servidor:** toda consulta é filtrada pelo usuário dono; o cliente nunca decide de quem é o dado.
 
 ## 🚀 Rodando localmente
 
@@ -40,37 +49,40 @@ cd vaxpet
 npm install
 ```
 
-Crie um arquivo `.env.local` na raiz:
+Crie um `.env.local` na raiz:
 
 ```env
 TURSO_DATABASE_URL=libsql://...
 TURSO_AUTH_TOKEN=...
-BETTER_AUTH_SECRET=...          # gere com: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+BETTER_AUTH_SECRET=...          # gere: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 BETTER_AUTH_URL=http://localhost:3000
+# opcionais (Google, fotos, reset de senha):
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+BLOB_READ_WRITE_TOKEN=...
+RESEND_API_KEY=...
 ```
 
-Aplique o schema no banco e suba o servidor:
+Aplique o schema e rode:
 
 ```bash
 npx drizzle-kit migrate
 npm run dev
 ```
 
-Abra [http://localhost:3000](http://localhost:3000).
-
 ## 📸 Screenshots
-
-<!-- Adicione aqui um print da home (com o painel de lembretes) e um da carteira de um pet.
-     Dica: crie uma pasta /docs, coloque as imagens lá e referencie assim:
-     ![Home](docs/home.png) -->
+<img width="1378" height="780" alt="image" src="https://github.com/user-attachments/assets/1595ca37-01cc-4a20-8b95-a70ce867a31f" />
+<img width="1362" height="792" alt="image" src="https://github.com/user-attachments/assets/16be7578-ee9a-4211-b963-ca6a3059d7aa" />
+<img width="1362" height="786" alt="image" src="https://github.com/user-attachments/assets/e5babe1d-3ce4-4327-ad50-dbc644ef32d2" />
 
 ## 🗺️ Próximos passos
 
-- Login com Google (OAuth)
-- Editar e excluir doses
-- Templates de vacinas sugeridas por espécie e idade
-- Verificação de email no cadastro
-- Testes automatizados da lógica de status
+- Notificações push (PWA)
+- Compartilhar a carteira com o veterinário
+
+## 📄 Licença
+
+Distribuído sob a licença MIT. Veja o arquivo [LICENSE](LICENSE).
 
 ---
 
